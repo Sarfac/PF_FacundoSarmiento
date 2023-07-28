@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;1,700&family=Open+Sans:wght@400;700&display=swap');
+/* 
+font-family: 'Montserrat', sans-serif;
+font-family: 'Open Sans', sans-serif;
+*/
+
+*{
+    font-family:'Montserrat', sans-serif;;
+}
+
+.titulo{
+    text-transform: uppercase;
+    padding: 5rem;
+    background-color: #525c5a;
+}
+.titulo span{
+    color:#4d7aeb;
+}
+.boton-carrito{
+    margin: 0 2rem;
+}
+
+.darkMode{
+    color:white;
+    background-color: black;
+}
