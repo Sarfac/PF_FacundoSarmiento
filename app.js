@@ -3,6 +3,13 @@ const inventario=[];
 const carrito=[]
 
 let inventarioDom=document.getElementById("inventario")
+let buscador =document.getElementById("buscador")
+let noCoincide= document.getElementById("buscado")
+let domCarrito= document.getElementById("modal-body")
+let botonCarrito= document.getElementById("botonCarrito")
+let totalCarrito= document.getElementById("totalCarrito")
+
+
 
 class Producto{
     constructor(id,nombre,precio,img){
@@ -33,11 +40,11 @@ inventario.push(camiseta1,camiseta2,camiseta3,camiseta4,camiseta5,camiseta6,cami
 
 console.log(inventario)
 
+localStorage.setItem("inventario",JSON.stringify(inventario))
 
-function agregarCarrito(producto){
-    carrito.push(producto)
-    console.log(carrito)
-}
+
+
+
 
 function mostrarInventario(array){
     inventarioDom.innerHTML=``
@@ -66,6 +73,8 @@ function mostrarInventario(array){
 }
 
 mostrarInventario(inventario)
+
+
 
 //ordenar array del inventario
 let selectOrden = document.getElementById("selectOrden")
@@ -109,10 +118,10 @@ function ordenarMenorMayor(array){
  function ordenarAlfabeticamenteTitulo(array){
    const arrayAlfabetico = [].concat(array)
    arrayAlfabetico.sort( (a,b) =>{
-      if (a.titulo > b.titulo) {
+      if (a.nombre > b.nombre) {
          return 1
        }
-       if (a.titulo < b.titulo) {
+       if (a.nombre < b.nombre) {
          return -1
        }
        // a must be equal to b
@@ -120,6 +129,95 @@ function ordenarMenorMayor(array){
    })
    mostrarInventario(arrayAlfabetico)
  }
+
+
+
+function busqueda(valor, array){
+   let buscado=array.filter((dato)=>dato.nombre.toLowerCase().includes(valor.toLowerCase()))
+   if(buscado.length == 0){
+      console.log(`No se encuantra`)
+      mostrarInventario(buscado)
+      noCoincide.innerHTML=`<h2>No Se encontraron resultados similares</h2>`
+   }else{
+      noCoincide.innerHTML=``
+      mostrarInventario(buscado)
+   }
+
+}
+
+// buscador
+
+buscador.addEventListener("input",()=>{
+   console.log(buscador.value)
+   busqueda(buscador.value, inventario)
+})
+
+function agregarCarrito(producto){
+   carrito.push(producto)
+   console.log(carrito)
+   localStorage.setItem("carro", JSON.stringify(carrito))
+
+   Toastify({
+
+      text: `Se agrego al carrito`,
+      position: "center",
+      duration: 2000
+      
+      }).showToast();
+  
+}
+
+
+function imprimirCarrito(array){
+   domCarrito.innerHTML=``
+   
+   array.forEach(element => {
+      domCarrito.innerHTML+=`<div class="card" id="card${element.id}" style="width: 18rem;">
+                              <img src="img/${element.img}" class="card-img-top" alt="${element.img}">
+                              <div class="card-body">
+                              <h5 class="card-title">${element.nombre}</h5>
+                              <p class="card-text">Precio: ${element.precio}</p>
+                              <a href="#" class="btn btn-primary" id="btneliminar${element.id}">Eliminar</a>
+                              </div>
+                           </div>`
+   })
+   array.forEach((cardCarrito)=>{
+      document.getElementById(`btneliminar${cardCarrito.id}`).addEventListener("click",()=>{
+         let card =document.getElementById(`card${cardCarrito.id}`)
+         card.remove()
+
+         let cardEliminar= array.find((producto)=>producto.id==cardCarrito.id)
+         let posicion=array.indexOf(cardEliminar)
+         array.splice(posicion,1)
+         localStorage.setItem("carro",JSON.stringify(array))
+         calcTotalCarrito(carrito)
+
+      })
+      
+   })
+   ;
+}
+
+
+botonCarrito.addEventListener("click",()=>{
+   
+   imprimirCarrito(carrito)
+   calcTotalCarrito(carrito)
+})
+
+function calcTotalCarrito(array){
+   let total=0
+   totalCarrito.innerHTML=``
+   array.forEach((elemen)=>{
+      total=total+elemen.precio
+    
+   })
+   totalCarrito.innerHTML+=`<h3>Total de compra: $ ${total}</h3>`
+   
+}
+
+
+
 
  //DARKMODE: 
 let botonDarkMode = document.getElementById("botonDarkMode")
