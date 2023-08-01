@@ -1,25 +1,54 @@
+/*
+Simulador de tienda virtual en donde se imprimen los articulos guardados de un array llamado inventario en el DOM
+el cual se pueden ordenar por mayor y menor precio, alfabeticamente y usar un buscador de nombre de articulos, todo esto modificando el DOM 
+y mostrando el resultado en pantalla.
+capturando eventos se pushearon articulos a un array llamado carrito en donde se pueden agregar y eliminar los productos agregados y tambien
+guardando en el Storage el carrito para que quede guardado el carrito aun refrescando el navegador
 
-const inventario=[];
-const carrito=[]
+modo oscuro
 
+librerias
+*/
+
+//Declaracion de Variables arrays
+let inventario=[]
+let carrito=[]
+
+
+//Captura de elementon en DOM
 let inventarioDom=document.getElementById("inventario")
 let buscador =document.getElementById("buscador")
 let noCoincide= document.getElementById("buscado")
 let domCarrito= document.getElementById("modal-body")
 let botonCarrito= document.getElementById("botonCarrito")
 let totalCarrito= document.getElementById("totalCarrito")
+let selectOrden = document.getElementById("selectOrden")
+let botonDarkMode = document.getElementById("botonDarkMode")
+let botonLightMode = document.getElementById("botonLightMode")
+let btnFinalizarCompra = document.getElementById("btnFinalizarCompra")
 
 
-
+//Generacion de clase constructora
 class Producto{
     constructor(id,nombre,precio,img){
         this.id=id
         this.nombre=nombre
         this.precio=precio
         this.img=img
-    }
+        this.cant=1
+      }
+      //declaracion de funciones para sumas cantidadades en carrito
+      sumarUnidad() {
+        this.cant=this.cant+1 
+        return this.cant
+      }
+      restarUnidad() {
+         this.cant=this.cant-1 
+         return this.cant
+       }
 }
 
+//Declaracion de los objetos
 const camiseta1 = new Producto(1,"Angular", 2000, "angular.jpg")
 const camiseta2 = new Producto(2,"HTML", 4000, "html.jpg")
 const camiseta3 = new Producto(3,"JavaScript", 2500, "js.jpg")
@@ -35,20 +64,63 @@ const camiseta12 = new Producto(12,"TypeScript", 4000, "ts.jpg")
 const camiseta13 = new Producto(13,"Vue JS", 5000, "vue.jpg")
 const camiseta14 = new Producto(14,"Word Press", 2500, "wp.jpg")
 
-inventario.push(camiseta1,camiseta2,camiseta3,camiseta4,camiseta5,camiseta6,camiseta7,
-                camiseta8,camiseta9,camiseta10,camiseta11,camiseta12,camiseta13,camiseta14)
+inventario.push(camiseta1,camiseta2,camiseta3,camiseta4,camiseta5,camiseta6,camiseta7,camiseta8,camiseta9,camiseta10
+                  ,camiseta11,camiseta12,camiseta13,camiseta14)
+      
+                  
+//Intento de crear un archivo JSON y comunicarse con esta archivo, no pude finalizarlo
+//porque tenia errores, asi que mantengo la version en la que creaba los objetos
 
-console.log(inventario)
+/* const cargarInventario = async()=>{
+   const res = await fetch("inventario.json")
+   const data = await res.json()
 
-localStorage.setItem("inventario",JSON.stringify(inventario))
+   for(let producto of data){
+      let camiseta= new Producto(producto.id,producto.nombre,producto.precio,producto.img)
+      inventario.push(camiseta)
+   }
+
+   console.log(inventario)
+   localStorage.setItem("inventario",JSON.stringify(inventario))
+   
+}
+if (localStorage.getItem("inventario")){
+   inventario=JSON.parse(localStorage.getItem("inventario"))
+}else{
+   cargarInventario()
+}
+*/
 
 
+//Guardando en el Storage el array inventarrio
+if (localStorage.getItem("inventario")){
+   inventario=JSON.parse(localStorage.getItem("inventario"))
+}else{
+   inventario.push(camiseta1,camiseta2,camiseta3,camiseta4,camiseta5,camiseta6,camiseta7,camiseta8,camiseta9,camiseta10
+      ,camiseta11,camiseta12,camiseta13,camiseta14)
+   localStorage.setItem("inventario",JSON.stringify(inventario))
+}
 
 
+//comprobando que no exisntan productos en el carrito de compras en Storage
+if (localStorage.getItem("carro")){
+   /* carrito=JSON.parse(localStorage.getItem("carro")) */
+   console.log(`Existe`)
+   for (let cami of JSON.parse(localStorage.getItem("carro"))){
+      let camiStorage = new Producto(cami.id, cami.nombre, cami.precio, cami.img)
+      carrito.push(camiStorage)
+      console.log(camiStorage)
+   }
+   console.log(carrito)
+   
+}else{
+   localStorage.setItem("carro", carrito)
+   console.log(`No existe`)
+}
 
+//declaracion de funcion para mostrar el inventario en el DOM
 function mostrarInventario(array){
     inventarioDom.innerHTML=``
-    
     for(let camiseta of array){
         let nuevoProductoDiv=document.createElement("div")
         nuevoProductoDiv.className="col-12 col-md-6 col-lg-4"
@@ -62,23 +134,16 @@ function mostrarInventario(array){
                                     </div>`
     
         inventarioDom.appendChild(nuevoProductoDiv)
-
         let botonCarrito=document.getElementById(`botonCarrito${camiseta.id}`)
         botonCarrito.addEventListener("click",()=>{
             agregarCarrito(camiseta)
-        })
-
-        }
-
+        })}
 }
 
+//llamado a la funcion para imprimir el inventario en el DOM
 mostrarInventario(inventario)
 
-
-
 //ordenar array del inventario
-let selectOrden = document.getElementById("selectOrden")
-
 selectOrden.addEventListener("change", () => {
    console.log(selectOrden.value)
    switch(selectOrden.value){
@@ -97,6 +162,7 @@ selectOrden.addEventListener("change", () => {
    }
 }
 )
+
 //Metodos de ordenamiento para el inventario
 function ordenarMenorMayor(array){
    //copia del array, aplicar sort y no modificar el original
@@ -104,7 +170,6 @@ function ordenarMenorMayor(array){
    console.log(menorMayor)
    //forma ascendente
    menorMayor.sort((a,b) => a.precio - b.precio)
-   
    mostrarInventario(menorMayor)
  }
  
@@ -131,7 +196,7 @@ function ordenarMenorMayor(array){
  }
 
 
-
+//funcion del input de busqueda
 function busqueda(valor, array){
    let buscado=array.filter((dato)=>dato.nombre.toLowerCase().includes(valor.toLowerCase()))
    if(buscado.length == 0){
@@ -142,65 +207,97 @@ function busqueda(valor, array){
       noCoincide.innerHTML=``
       mostrarInventario(buscado)
    }
-
 }
 
-// buscador
-
+// captura del evento del buscador
 buscador.addEventListener("input",()=>{
    console.log(buscador.value)
    busqueda(buscador.value, inventario)
 })
 
+//
 function agregarCarrito(producto){
-   carrito.push(producto)
-   console.log(carrito)
+   let elemtAgregado=carrito.find((elem)=>elem.id==producto.id) 
+
+   if(elemtAgregado==undefined){
+      carrito.push(producto)
+      console.log(carrito)
+      Toastify({
+         text: `Se agrego al carrito`,
+         position: "center",
+         duration: 2000
+         }).showToast();
+   }
+   /* else{
+      Swal.fire({
+         icon: 'error',
+         title: `El producto ${producto.nombre}  ya esta en carrito`,
+       })
+   } */
    localStorage.setItem("carro", JSON.stringify(carrito))
-
-   Toastify({
-
-      text: `Se agrego al carrito`,
-      position: "center",
-      duration: 2000
-      
-      }).showToast();
-  
 }
 
 
+//declaracion de la funcion para imprimir el carrito cuando de apreta en boton
 function imprimirCarrito(array){
    domCarrito.innerHTML=``
-   
    array.forEach(element => {
       domCarrito.innerHTML+=`<div class="card" id="card${element.id}" style="width: 18rem;">
                               <img src="img/${element.img}" class="card-img-top" alt="${element.img}">
                               <div class="card-body">
                               <h5 class="card-title">${element.nombre}</h5>
                               <p class="card-text">Precio: ${element.precio}</p>
+                              <p>Total de unidades: ${element.cant}</p>
+                              <button type="button" class="btn btn-success" id="btnSumar${element.id}">+1</button>
+                              <button type="button" class="btn btn-danger" id="btnRestar${element.id}">-1</button>
                               <a href="#" class="btn btn-primary" id="btneliminar${element.id}">Eliminar</a>
                               </div>
                            </div>`
    })
+
    array.forEach((cardCarrito)=>{
+      // evento boton agregar unidad
+      document.getElementById(`btnSumar${cardCarrito.id}`).addEventListener("click",()=>{
+         cardCarrito.sumarUnidad()
+         imprimirCarrito(array)
+         calcTotalCarrito(array)
+         localStorage.setItem("carro",JSON.stringify(array))
+         
+      })
+      //evento boton restar unidad
+      document.getElementById(`btnRestar${cardCarrito.id}`).addEventListener("click",()=>{
+         cardCarrito.restarUnidad()
+         imprimirCarrito(array)
+         calcTotalCarrito(array)
+         
+         if (cardCarrito.cant==0){
+            let card =document.getElementById(`card${cardCarrito.id}`)
+            card.remove()
+            let cardEliminar= array.find((producto)=>producto.id==cardCarrito.id)
+            let posicion=array.indexOf(cardEliminar)
+            array.splice(posicion,1)
+
+         localStorage.setItem("carro",JSON.stringify(array))
+         calcTotalCarrito(carrito)
+         }
+      })
+      //evento boton eliminar del carrito
       document.getElementById(`btneliminar${cardCarrito.id}`).addEventListener("click",()=>{
          let card =document.getElementById(`card${cardCarrito.id}`)
          card.remove()
-
          let cardEliminar= array.find((producto)=>producto.id==cardCarrito.id)
          let posicion=array.indexOf(cardEliminar)
          array.splice(posicion,1)
+
          localStorage.setItem("carro",JSON.stringify(array))
          calcTotalCarrito(carrito)
-
       })
       
    })
    ;
 }
-
-
+//llamada a la funcion de imprimir carrito apretando el boton 
 botonCarrito.addEventListener("click",()=>{
-   
    imprimirCarrito(carrito)
    calcTotalCarrito(carrito)
 })
@@ -209,20 +306,19 @@ function calcTotalCarrito(array){
    let total=0
    totalCarrito.innerHTML=``
    array.forEach((elemen)=>{
-      total=total+elemen.precio
+      total=total+(elemen.precio * elemen.cant)
     
    })
    totalCarrito.innerHTML+=`<h3>Total de compra: $ ${total}</h3>`
-   
 }
 
+//evento finalizar compra
+btnFinalizarCompra.addEventListener("click",()=>{
+   Swal.fire(`Muchas gracias por su compra 
+            Pronto nos podremos en contacto`)
+})
 
-
-
- //DARKMODE: 
-let botonDarkMode = document.getElementById("botonDarkMode")
-let botonLightMode = document.getElementById("botonLightMode")
-
+ // implementando darkmode y guardado en el storage para la proxima visita: 
 //consulta localStorage
 let modoOscuro = localStorage.getItem("modoOscuro")
 console.log(modoOscuro)

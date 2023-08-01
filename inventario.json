@@ -1,0 +1,120 @@
+[
+    {
+        "id" : 1 ,
+        "nombre" :"Angular",
+        "precio" : 2000,
+        "img" : "angular.jpg",
+        "cant" : 1
+
+    },
+    {
+        "id" : 2 ,
+        "nombre" :"HTML",
+        "precio" : 4000,
+        "img" : "html.jpg",
+        "cant" : 1
+
+    },
+    {
+        "id" : 3 ,
+        "nombre" :"JavaScript",
+        "precio" : 2500,
+        "img" : "js.jpg",
+        "cant" : 1
+
+    },
+    {
+        "id" : 4 ,
+        "nombre" :"Bulma",
+        "precio" : 3000,
+        "img" : "bulma.jpg",
+        "cant" : 1
+
+    }
+    ,
+    {
+        "id" : 5 ,
+        "nombre" :"Drupal",
+        "precio" : 4000,
+        "img" : "drupal.jpg",
+        "cant" : 1
+
+    }
+    ,
+    {
+        "id" : 6 ,
+        "nombre" :"Git",
+        "precio" : 4500,
+        "img" : "git.jpg",
+        "cant" : 1
+
+    }
+    ,
+    {
+        "id" : 7 ,
+        "nombre" :"GraphQL",
+        "precio" : 3000,
+        "img" : "graph.jpg",
+        "cant" : 1
+
+    }
+    ,
+    {
+        "id" : 8 ,
+        "nombre" :"NodeJS",
+        "precio" : 3500,
+        "img" : "node.jpg",
+        "cant" : 1
+
+    },
+    {
+        "id" : 9 ,
+        "nombre" :"React",
+        "precio" : 2500,
+        "img" : "react.jpg",
+        "cant" : 1
+
+    },
+    {
+        "id" : 10 ,
+        "nombre" :"Redux",
+        "precio" : 2600,
+        "img" : "redux.jpg",
+        "cant" : 1
+
+    },
+    {
+        "id" : 11 ,
+        "nombre" :"Sass",
+        "precio" : 2700,
+        "img" : "sass.jpg",
+        "cant" : 1
+
+    },
+    {
+        "id" : 12 ,
+        "nombre" :"TypeScrip",
+        "precio" : 4000,
+        "img" : "ts.jpg",
+        "cant" : 1
+
+    },
+    {
+        "id" : 13 ,
+        "nombre" :"Vue JS",
+        "precio" : 5000,
+        "img" : "vue.jpg",
+        "cant" : 1
+
+    },
+    {
+        "id" : 14 ,
+        "nombre" :"Word Press",
+        "precio" : 2500,
+        "img" : "wp.jpg",
+        "cant" : 1
+
+    }
+
+
+]
